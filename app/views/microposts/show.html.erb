@@ -1,0 +1,33 @@
+<div class="row">
+  <div class="col-sm-4" id="micropost-<%= @micropost.id %>">
+    <%= link_to gravatar_for(@micropost.user, size: 80), @micropost.user ,:class=>"user-name" %>
+    <br/>
+    <span class="user"><%= link_to "#{@micropost.user.name}", @micropost.user  %></span>
+    <br/>
+    <span class="micropost_content">
+        <%= @micropost.content %>
+        <%= image_tag @micropost.picture.url if @micropost.picture?%>
+    </span>
+    <%= form_with(model: [@micropost, @comment] ) do |f| %>
+      <div>
+        <%= f.text_area :body, placeholder: "Compose new comment..." %>
+      </div>
+      <div class="actions">
+        <%= f.submit "Post", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+  <div class="col-sm-8" id="comments_area">
+    <h3>Comments</h3>
+    <% @comments.each do |comment| %>
+      <% unless comment.id.nil? %>
+        <%= link_to gravatar_for(comment.user, size: 50), comment.user %>
+        <p><%= link_to "#{comment.user.name}さん", user_path(comment.user.id) %></p>
+        <p>コメント：<%= comment.body %></p>
+        <% if comment.user == current_user %>
+          <p><%= link_to 'コメントを削除する', micropost_comment_path(comment.micropost_id, comment.id), method: :delete, remote: true %></p>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
