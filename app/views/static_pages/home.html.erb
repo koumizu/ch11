@@ -1,3 +1,6 @@
+<% provide(:search_name, 'content search') %>
+<% provide(:path, root_path) %>
+
 <% if logged_in? %>
   <div class="row">
     <aside class="col-md-4">
@@ -13,6 +16,7 @@
     </aside>
     <div class="col-md-8">
       <h3>Micropost Feed</h3>
+      <%= render 'users/search' %>
       <%= render 'shared/feed' %>
     </div>
   </div>

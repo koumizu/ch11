@@ -8,6 +8,13 @@ class Micropost < ApplicationRecord
   validates :content, presence: true, length: { maximum: 140 }
   validate  :picture_size
   
+  def self.search(search) #ここでのself.はUser.を意味する
+    if search
+      where(['content LIKE ?', "%#{search}%"]) #検索とnameの部分一致を表示。User.は省略
+    else
+      all #全て表示。User.は省略
+    end
+  end
   
   private
 
