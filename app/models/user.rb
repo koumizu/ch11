@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  has_many :favorites, dependent: :destroy
+  has_many :like_microposts, through: :favorites, source: :micropost
   has_many :microposts, dependent: :destroy
   has_many :active_relationships, class_name:  "Relationship",
                                   foreign_key: "follower_id",
@@ -29,7 +31,7 @@ class User < ApplicationRecord
                                                   BCrypt::Engine.cost
     BCrypt::Password.create(string, cost: cost)
   end
-
+  
   def User.new_token
     SecureRandom.urlsafe_base64
   end
@@ -96,6 +98,18 @@ class User < ApplicationRecord
   def following?(other_user)
     following.include?(other_user)
   end
+  
+   def like(micropost)
+     favorites.create(micropost_id: micropost.id)
+   end
+   
+   def unlike(micropost)
+     favorites.find_by(micropost_id: micropost.id).destroy
+   end
+   
+   def like?(micropost)
+     like_microposts.include?(micropost)
+   end
   
   private
 
